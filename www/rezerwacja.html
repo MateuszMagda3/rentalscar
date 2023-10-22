@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezerwacja Samochodu</title>
+
+    <!-- Bootstrap 5 i Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+
+</head>
+<body  class="d-flex flex-column min-vh-100">
+    <!-- Nagłówek -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <a class="navbar-brand ms-2" href="index.html">RentalsCar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="index.html">Strona Główna</a>
+                <a class="nav-item nav-link" href="index.html#aboutUs">O Nas</a>
+                <a class="nav-item nav-link" href="index.html#contact">Kontakt</a>
+            </div>
+            <div class="ms-auto me-2">
+                <select id="languageSelector">
+                    <option value="pl">Polski</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+ <!-- Szczegóły Samochodu -->
+ <section class="my-5">
+    <div class="row">
+        <!-- Symulacja Zdjęcia Samochodu -->
+        <div class="col-md-6 mb-3">
+            <div id="carImages" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner rounded-3" id="carouselInner">
+                </div>
+                <a class="carousel-control-prev" href="#carImages" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Poprzednie</span>
+                </a>
+                <a class="carousel-control-next" href="#carImages" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Następne</span>
+                </a>
+            </div>
+        </div>
+        <!-- Szczegóły -->
+        <div class="col-md-6">
+            <h2 id="car-make">Marka:</h2>
+            <h2 id="car-model">Model:</h2>
+            <h4 id="car-year">Rok Produkcji:</h4>
+            <p class="mt-3" id="car-description">Opis:</p>
+        </div>
+        
+    </div>
+</section>
+
+<div class="row">
+
+    <!-- Cennik -->
+    <div class="col-md-6 my-5">
+        <h2 class="text-center mb-4">Cennik</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped table-light">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Okres Wynajmu</th>
+                        <th scope="col">Cena za Dzień</th>
+                    </tr>
+                </thead>
+                <tbody id="priceTableBody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Formularz Kontaktowy -->
+    <div class="col-md-6 my-5">
+            <h2 class="text-center mb-4">Rezerwacja Samochodu</h1>
+                <form id="reservationForm">                 <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="pickupDate" class="form-label">Data Odbioru:</label>
+                            <input type="date" class="form-control" id="pickupDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="returnDate" class="form-label">Data Zwrotu:</label>
+                            <input type="date" class="form-control" id="returnDate" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="firstName" class="form-label">Imię:</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="Wprowadź imię" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lastName" class="form-label">Nazwisko:</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Wprowadź nazwisko" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" placeholder="Wprowadź email" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Telefon:</label>
+                            <input type="tel" class="form-control" id="phone" placeholder="Wprowadź numer telefonu" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Zarezerwuj Samochód</button>
+                </form>
+    </div>
+
+
+
+    </div>
+
+    <!-- Stopka -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <p>&copy; 2023 Wypożyczalnia Samochodów</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+        const urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get('id');
+
+        if(urlParams.has('pickupDate') && urlParams.has('returnDate'))
+            {
+                let pickupDate = urlParams.get('pickupDate');
+                let returnDate = urlParams.get('returnDate');
+                document.getElementById('pickupDate').value = pickupDate;
+                document.getElementById('returnDate').value = returnDate;
+            }
+
+            const BASE_URL = 'http://localhost:8080';
+            const ENDPOINT = '/carDetails';
+            const QUERY = '?id=' + id;
+            const url = `${BASE_URL}${ENDPOINT}${QUERY}`;
+
+            async function fetchData() {
+                try {
+                    let response = await fetch(url);
+
+                    if (!response.ok) {
+                        throw new Error(`Błąd HTTP: ${response.status} ${response.statusText}`);
+                    }
+
+                    let data = await response.json();
+                    populateSlider(data);
+                    populateCarDetails(data);
+                    populatePriceTable(data);
+
+                } catch (error) {
+                    console.error('Błąd pobierania danych:', error);
+                    showError();
+                }
+            }
+
+            function showError() {
+                const container = document.querySelector('.container');
+                container.innerHTML = `
+                    <div class="alert alert-danger" role="alert">
+                        Przepraszamy, wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę lub skontaktuj się z nami, jeśli problem będzie się powtarzał.
+                    </div>
+                `;
+            } 
+            
+            function populateSlider(carData) {
+            const carouselInner = document.getElementById('carouselInner');
+            carouselInner.innerHTML = '';
+        
+            carData.photoList.forEach((photo, index) => {
+                    let carouselItem = document.createElement('div');
+                    carouselItem.className = 'carousel-item';
+            
+                    if (index === 0) {
+                        carouselItem.classList.add('active');
+                    }
+            
+                    let imgElement = document.createElement('img');
+                    imgElement.src = photo.src;
+                    imgElement.alt = photo.alt || `Zdjęcie samochodu ${carData.make} ${carData.model}`;
+                    imgElement.className = 'd-block w-100';
+            
+                    // Dodanie atrybutu loading="lazy" dla obrazów, które nie są pierwszym obrazem w karuzeli
+                    if (index !== 0) {
+                        imgElement.setAttribute('loading', 'lazy');
+                    }
+            
+                    let anchorElement = document.createElement('a');
+                    anchorElement.href = photo.src;
+                    anchorElement.setAttribute('data-lightbox', 'carSlider');
+                    anchorElement.setAttribute('data-title', photo.alt || `Zdjęcie samochodu ${carData.make} ${carData.model}`);
+                    anchorElement.appendChild(imgElement);
+            
+                    carouselItem.appendChild(anchorElement);
+                    carouselInner.appendChild(carouselItem);
+                
+            });
+        }
+
+        function populateAdditionalInfo(carData) {
+            const detailsList = document.getElementById('detailsList');
+            const equipmentList = document.getElementById('equipmentList');
+            const rentalTermsList = document.getElementById('rentalTermsList');
+
+            detailsList.innerHTML = `
+                <li>Marka: ${sanitize(carData.make)}</li>
+                <li>Model: ${sanitize(carData.model)}</li>
+                <li>Pojemność silnika: ${sanitize(carData.engineSize)} L</li>
+                <li>Rodzaj paliwa: ${sanitize(carData.fuelType)}</li>
+                <li>Liczba drzwi: ${sanitize(carData.numberOfDoors)}</li>
+                <li>Rodzaj skrzyni biegów: ${sanitize(carData.transmissionType)}</li>
+            `;
+
+            equipmentList.innerHTML = carData.equipmentList.map(equip => `<li>${sanitize(equip)}</li>`).join('');
+            rentalTermsList.innerHTML = carData.rentalConditionList.map(condition => `<li>${sanitize(condition)}</li>`).join('');
+        }
+
+        function populateCarDetails(carData) {
+            document.getElementById('car-make').textContent = "Marka: " + carData.make;
+            document.getElementById('car-model').textContent = "Model: " + carData.model;
+            document.getElementById('car-year').textContent = "Rok Produkcji: " + carData.productionYear;
+            document.getElementById('car-description').textContent = "Opis: " + carData.description;
+        }
+
+        function populatePriceTable(carData) {
+            const priceTableBody = document.getElementById('priceTableBody');
+            carData.rateList.sort((a, b) => a.minDays - b.minDays);
+            priceTableBody.innerHTML = '';
+
+            carData.rateList.forEach(rate => {
+                const row = document.createElement('tr');
+
+                const periodCell = document.createElement('td');
+                periodCell.textContent = `${rate.minDays} - ${rate.maxDays === 0 ? 'więcej' : rate.maxDays} dni`;
+
+                const dailyRateCell = document.createElement('td');
+                dailyRateCell.textContent = `${rate.dailyRate.toFixed(2)} zł`;
+
+                row.appendChild(periodCell);
+                row.appendChild(dailyRateCell);
+                priceTableBody.appendChild(row);
+            });
+        }
+
+        function getFormData() {
+            return {
+                carId: id,  // Assuming 'id' is globally available, as per your existing script
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                phoneNumber: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                startDate: document.getElementById('pickupDate').value,
+                endDate: document.getElementById('returnDate').value
+            };
+        }
+
+        async function submitReservation() {
+            try {
+                const data = getFormData();
+                const response = await fetch('http://localhost:8080/reservations/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Reservation created', result);
+                    alert("Rezerwacja została złożona. Skontaktujemy się z tobą w celu jej potwierdzenia.");
+                    window.location.href = "index.html";
+                } else {
+                    console.error('Error creating reservation', response.statusText);
+                    alert("Wystąpł błądczas składania rezerwacji. Prosimy sprubować puźnieuj lub skontaktować sie z nami jeśli błąd będzie się powtarzał.");
+
+                }
+            } catch (error) {
+                console.error('Network error', error);
+                alert("Wystąpł błądczas składania rezerwacji. Prosimy sprubować puźnieuj lub skontaktować sie z nami jeśli błąd będzie się powtarzał.");
+            }
+        }
+
+        document.getElementById('reservationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            submitReservation();
+        });
+
+
+        
+            
+            fetchData();
+
+    </script>
+</body>
+</html>

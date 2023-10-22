@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyszukane Samochody</title>
+
+    <!-- Bootstrap 5 i Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+
+<body  class="d-flex flex-column min-vh-100">
+
+    <!-- Nagłówek -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <a class="navbar-brand ms-2" href="index.html">RentalsCar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="index.html">Strona Główna</a>
+                <a class="nav-item nav-link" href="index.html#aboutUs">O Nas</a>
+                <a class="nav-item nav-link" href="index.html#contact">Kontakt</a>
+            </div>
+            <div class="ms-auto me-2">
+                <select id="languageSelector">
+                    <option value="pl">Polski</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+    
+    <section id="search" class="container my-4">
+        <h2 class="text-center mb-4">Wyszukaj Samochód</h2>
+        <form class="row">
+            <!-- Data Odbioru -->
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label for="pickup-date"><i class="fas fa-calendar-alt"></i> Data Odbioru:</label>
+                    <input type="date" class="form-control" name="pickupDate" id="pickup-date" required>
+                </div>
+            </div>
+            <!-- Data Zwrotu -->
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label for="return-date"><i class="fas fa-calendar-alt"></i> Data Zwrotu:</label>
+                    <input type="date" class="form-control" name="returnDate" id="return-date" required>
+                </div>
+            </div>
+            <!-- Przycisk Wyszukaj Samochód -->
+            <div class="col-md-4 align-self-center">
+                <button type="submit" class="btn btn-primary btn-block">Wyszukaj Samochód</button>
+            </div>
+        </form>
+    </section>
+
+    
+    
+    
+
+    
+
+
+    <div class="container my-4">
+        <h1 class="text-center mb-4">Dostępne Samochody</h1>
+        <div id="carsOffert">
+        
+        </div>
+    </div>
+    
+    
+    <!-- Stopka -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <p>&copy; 2023 Wypożyczalnia Samochodów</p>
+    </footer>
+
+    <!-- Skrypty Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+
+        let urlPickupDate = urlParams.get('pickupDate');
+        let urlReturnDate = urlParams.get('returnDate');
+
+        document.getElementById("pickup-date").value = urlPickupDate;
+        document.getElementById("return-date").value = urlReturnDate;
+
+
+        const url = 'http://localhost:8080/cars/free';
+
+        async function fetchFreeCars() {
+            try {
+                let response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        pickupDate: urlPickupDate,
+                        returnDate: urlReturnDate
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Błąd HTTP: ${response.status} ${response.statusText}`);
+                }
+
+                let data = await response.json();
+                displayCars(data);
+
+            } catch (error) {
+                console.error('Błąd pobierania danych:', error);
+                showError();
+            }
+        }
+
+        function showError() {
+            const container = document.querySelector('.container');
+            container.innerHTML = `
+                <div class="alert alert-danger" role="alert">
+                    Przepraszamy, wystąpił błąd podczas ładowania danych. Spróbuj ponownie za chwilę lub skontaktuj się z nami, jeśli problem będzie się powtarzał.
+                </div>
+            `;
+        }
+
+       
+            function displayCars(cars) {
+                const container = document.getElementById('carsOffert');
+
+
+                cars.forEach(car => {
+                    // Stwórz główny div
+                    let rowDiv = document.createElement('div');
+                    rowDiv.className = 'row mb-3';
+
+                    // Stwórz div dla zdjęcia
+                    let imgDiv = document.createElement('div');
+                    imgDiv.className = 'col-md-4';
+
+                    // Dodaj zdjęcie
+                    let carImage = document.createElement('img');
+                    carImage.src = car.photo; // ścieżka do zdjęcia z API
+                    carImage.alt = `Zdjęcie samochodu ${car.make} ${car.model}`; // alternatywny tekst dla zdjęcia
+                    carImage.style.width = '100%';  // lub inny odpowiedni rozmiar
+                    
+                    // Stwórz div dla ciała
+                    let bodyDiv = document.createElement('div');
+                    bodyDiv.className = 'col-md-8';
+                    
+                    // Dodaj tytuł
+                    let bodyTitle = document.createElement('h5');
+                    bodyTitle.innerText = `${car.make} ${car.model}`;
+                    
+                    // Dodaj opis
+                    let bodyText = document.createElement('p');
+                    bodyText.innerText = `Cena: od ${car.minPrice} zł/dzień`;
+                    
+                    // Dodaj przycisk do szczegółów
+                    let detailsButton = document.createElement('a');
+                    detailsButton.className = 'btn btn-primary';
+                    detailsButton.href = 'szczegoly.html?id=' + car.id  + '&pickupDate=' + urlPickupDate+ '&returnDate=' + urlReturnDate;
+                    detailsButton.innerText = 'Szczegóły';
+                    
+                    // Połącz wszystko razem
+                    rowDiv.appendChild(imgDiv);
+                    rowDiv.appendChild(bodyDiv);
+                    imgDiv.appendChild(carImage);
+                    bodyDiv.appendChild(bodyTitle);
+                    bodyDiv.appendChild(bodyText);
+                    bodyDiv.appendChild(detailsButton);
+                    container.appendChild(rowDiv);
+                });
+            } 
+
+
+            fetchFreeCars();
+
+
+
+    </script>
+</body>
+
+</html>
